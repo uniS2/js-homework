@@ -232,7 +232,8 @@ body {
   cursor: pointer;
 }
 
-/* 공통 에러 메세지 */
+/*! is--invalid 추가하기 */
+/* 공통 에러 메세지  */
 .error-message {
   color: red;
   display: none;

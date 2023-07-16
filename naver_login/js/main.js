@@ -3,32 +3,35 @@ const user = {
   pw: "spdlqj123!@",
 };
 
-let emailInput = document.querySelector(".user-email-input");
-let pwInput = document.querySelector(".user-password-input");
-let button = document.querySelector(".btn-login")
+// email, pw 정규표현식을 사용한 validation -> is--invalid 추가시 에러메세지
 
-// function emailEvent(node, event) {
-//   if (emailReg(node.value)){
-//     node.classList.remove(event);
-//   } else {
-//     node.classList.add(event);
-//   }
-// }
+const loginEvent = (node, type, func) => {
+  node = document.querySelector(node);
 
-emailInput.addEventListener("input", () => {
-  emailReg(emailInput.value) ? emailInput.classList.remove("is--invalid") : emailInput.classList.add("is--invalid");
-});
+  node.addEventListener(type, function(){
+    func(this.value) ? this.classList.remove("is--invalid") : this.classList.add("is--invalid");
+  })
+}
 
-// emailInput.addEventListener("input", emailEvent(emailInput, "is--invalid"));
+// 로그인 버튼을 클릭시 조건처리
 
-pwInput.addEventListener("input", () => {
-  pwReg(pwInput.value) ? pwInput.classList.remove("is--invalid") : pwInput.classList.add("is--invalid");
-});
+const button = (btn_node, email_node, pw_node, type, event = 'e') => {
+  btn_node = document.querySelector(btn_node);
+  email_node = document.querySelector(email_node);
+  pw_node = document.querySelector(pw_node);
+  
+  btn_node.addEventListener(type, function(event){
+    event.preventDefault(); // form 안의 button이 submit이어서 비밀번호가 틀려도 action 페이지로 이동 (이벤트 동작)
+    (email_node.value === user.id && pw_node.value === user.pw) ? (window.location.href = 'welcome.html') : alert ("로그인 정보를 다시 확인해주세요");
+  })
+}
 
-button.addEventListener("click", (e) => {
-  e.preventDefault();  // 비밀번호가 틀려도 button의 submit의  이벤트가 작동
-  if (emailInput.value === user.id && pwInput.value === user.pw){ window.location.href = 'welcome.html' };
-})
+// 실행
+
+loginEvent('.user-email-input', 'input', emailReg);
+loginEvent('.user-password-input', 'input', pwReg);
+button('.btn-login', ".user-email-input", ".user-password-input", 'click');
+
 /*
 
 1. email 정규표현식을 사용한 validation -> is--invalid 추가시 에러메세지
