@@ -12,7 +12,7 @@
 
 ---   
 ## 설명
-[email(id)과 pw 정규표현식을 이용한 is--invalid 클래스 추가 함수]
+**[email(id)과 pw 정규표현식을 이용한 is--invalid 클래스 추가 함수]**
 ```javascript
 const loginEvent = (node, type, func) => {
   node.addEventListener(type, function(){
@@ -29,7 +29,7 @@ const loginEvent = (node, type, func) => {
   - `type` : 실행할 이벤트
   - `func` : 함수 `emailReg`, `pwReg` 중 현재 `node`에 따라 실행할 함수   
    
-[로그인 버튼 클릭시 페이지 이동 함수]
+**[로그인 버튼 클릭시 페이지 이동 함수]**
 ```javascript
 const button = (node, type, page) => {
   node = document.querySelector(node);
@@ -48,7 +48,7 @@ user 객체의 id, pw 값과 input에 넣어준 id, pw 값이 동일할 경우 `
   - `page` : user 객체의 id, pw 값과 input에 넣어준 id, pw 값이 동일할 경우 이동할 페이지  
   - `event.preventDefault()` : form 안의 button이 submit 상태이기 때문에 일어나는 이벤트 동작 이슈를 방지한다.   
    
-[실행]  
+**[실행]** 
 ```javascript
 const email = document.querySelector('.user-email-input');
 const pw = document.querySelector('.user-password-input');
