@@ -6,8 +6,6 @@ const user = {
 // email, pw 정규표현식을 사용한 validation -> is--invalid 추가시 에러메세지
 
 const loginEvent = (node, type, func) => {
-  node = document.querySelector(node);
-
   node.addEventListener(type, function(){
     func(this.value) ? this.classList.remove("is--invalid") : this.classList.add("is--invalid");
   })
@@ -15,22 +13,24 @@ const loginEvent = (node, type, func) => {
 
 // 로그인 버튼을 클릭시 조건처리
 
-const button = (btn_node, email_node, pw_node, type, event = 'e') => {
-  btn_node = document.querySelector(btn_node);
-  email_node = document.querySelector(email_node);
-  pw_node = document.querySelector(pw_node);
+const button = (node, type, page) => {
+  node = document.querySelector(node);
   
-  btn_node.addEventListener(type, function(event){
+  node.addEventListener(type, function(event){
     event.preventDefault(); // form 안의 button이 submit이어서 비밀번호가 틀려도 action 페이지로 이동 (이벤트 동작)
-    (email_node.value === user.id && pw_node.value === user.pw) ? (window.location.href = 'welcome.html') : alert ("로그인 정보를 다시 확인해주세요");
+    (email.value === user.id && pw.value === user.pw) ? (window.location.href = page) : alert ("로그인 정보를 다시 확인해주세요");
   })
 }
 
 // 실행
 
-loginEvent('.user-email-input', 'input', emailReg);
-loginEvent('.user-password-input', 'input', pwReg);
-button('.btn-login', ".user-email-input", ".user-password-input", 'click');
+// 이메일, 패스워드 지정
+const email = document.querySelector('.user-email-input');
+const pw = document.querySelector('.user-password-input');
+
+loginEvent(email, 'input', emailReg);
+loginEvent(pw, 'input', pwReg);
+button('.btn-login', 'click', 'welcome.html');
 
 /*
 
