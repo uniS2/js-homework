@@ -33,19 +33,24 @@ function removeClass(node, className) {
 
 // 사용자함수 생성
 // 1. 'is-active' 클래스 : 반복문
-const setRemoveClass = (node, className) => {
+const setRemoveAllClass = (node, className) => {
   if (typeof node === "string") node = getNode(node);
   if (!className) {
     node.className = "";
     return;
   }
   node.forEach((node) => node.classList.remove(className));
-}
+};
 
 const setClass = (removeNode, addNode, className) => {
-  setRemoveClass(removeNode, className);
-  addClass(addNode, className)
-}
+  setRemoveAllClass(removeNode, className);
+  addClass(addNode, className);
+};
+
+// index 구하기
+const setIndex = (node) => {
+  return node.dataset.index - 1;
+};
 
 // 2. nav 클릭시 배경 색상 변경 => setBgColor
 const setBgColor = (color) => {
@@ -54,39 +59,37 @@ const setBgColor = (color) => {
   body.style.background = `linear-gradient(to bottom, ${colorA},${colorB})`;
 };
 
-// 3. 이미지 변경 => setImage
-const setImage = (name) => {
+// 3. 이미지 및 대체텍스트 변경 => setImage
+const setImage = (srcName, alt) => {
   const visualImage = getNode(".visual img");
-  visualImage.setAttribute("src", `./assets/${name.toLowerCase()}.jpeg`);
-};
-
-// 4. 텍스트 변경 => setNameText
-const setNameText = (name) => {
-  if (typeof node === "string") node = getNode(node);
-  const nickName = getNode(".nickName");
-  nickName.textContent = name;
-};
-
-// 대체첵스트 변경 -> setAlt
-const setAlt = (alt) => {
-  const visualImage = getNode(".visual img");
+  visualImage.setAttribute("src", `./assets/${srcName.toLowerCase()}.jpeg`);
   visualImage.setAttribute("alt", alt);
 };
 
-// ? 오디오 재생
-const setAudio = (name, volume) => {
-  // $ 이전에 재생 중이던 오디오가 있으면 정지
-  if (currentAudio) currentAudio.pause();
+// 4. 텍스트 변경 => setNameText
+const setNameText = (title) => {
+  if (typeof node === "string") node = getNode(node);
+  const nickName = getNode(".nickName");
+  nickName.textContent = title;
+};
 
-  const audio = new Audio(
-    `/poster/client/assets/audio/${name.toLowerCase()}.m4a`
-  );
-  // 이전에 재생 중이던 오디오가 있을시 중지
-  audio.volume = volume; // 음량 설정
-  audio.play(); // 재생
+// 오디오 재생
+const setAudio = (srcName, volume) => {
+  // 이전에 재생 중이던 오디오가 있으면 정지
+  if (currentAudio) {
+    if (currentAudio.isPlaying()) {
+      currentAudio.stop();
+    }
+  }
 
-  // $ 현재 재생 중인 오디오 업데이트
-  currentAudio = audio;
+  source = `/poster/client/assets/audio/${srcName.toLowerCase()}.m4a`;
+  const playAudio = new AudioPlayer(source);
+
+  playAudio.volume = volume;
+  playAudio.play();
+
+  //  현재 재생 중인 오디오 업데이트
+  currentAudio = playAudio;
 };
 
 // 변수 선언
@@ -101,21 +104,24 @@ function handleSlider(e) {
   let target = e.target.closest("li");
   if (!target) return;
 
-  setClass(list, target, "is-active");
+  const { color, name, alt } = data[setIndex(target)];
 
-  const index = target.dataset.index - 1;
-  const { color, name, alt } = data[index];
+  setClass(list, target, "is-active");
 
   setBgColor(color);
 
   setNameText(name);
 
-  setImage(name);
+  setImage(name, alt);
 
-  setAlt(alt);
+  setAudio(name, 1);
 
-  setAudio(name, 0.1);
+  // * volume 조절할 수 있도록
 }
 
 // 이벤트 위임: 1. 클릭 이벤트 활성화
-container.addEventListener("click", handleSlider);
+const eventStart = () => {
+  container.addEventListener("click", handleSlider);
+};
+
+eventStart();
