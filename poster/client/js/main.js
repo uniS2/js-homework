@@ -8,101 +8,114 @@
 
 */
 
-// ^ 함수 정의
+// 유틸 함수
 function getNode(node) {
-  if (typeof node !== 'string') {
-    throw new Error('getNode 함수의 인수는 문자 타입 이어야 합니다.');
+  if (typeof node !== "string") {
+    throw new Error("getNode 함수의 인수는 문자 타입 이어야 합니다.");
   }
 
   return document.querySelector(node);
 }
 
 function addClass(node, className) {
-  if (typeof node === 'string') node = getNode(node);
-  if (typeof node !== 'string') {
-    throw new Error('getNode 함수의 인수는 문자 타입 이어야 합니다.');
-  }
-  node.classList.add(className)
+  if (typeof node === "string") node = getNode(node);
+  node.classList.add(className);
 }
 
-// function removeClass(node, className) {
-//   if (typeof node === 'string') node = getNode(node);
-//   if (!className) {
-//     node.className = '';
-//     return;
-//   }
-//   node.classList.remove(className);
-// }
+function removeClass(node, className) {
+  if (typeof node === "string") node = getNode(node);
+  if (!className) {
+    node.className = "";
+    return;
+  }
+  node.classList.remove(className);
+}
 
-// ^ 함수 생성
-// ^ 2. nav 클릭시 배경 색상 변경 => setBgColor
+// 사용자함수 생성
+// 1. 'is-active' 클래스 : 반복문
+const setRemoveClass = (node, className) => {
+  if (typeof node === "string") node = getNode(node);
+  if (!className) {
+    node.className = "";
+    return;
+  }
+  node.forEach((node) => node.classList.remove(className));
+}
 
-// const setBgColor = (node, index) => {
-//   node = getNode(node)
-//   const {color} = data[index-1];
-//   const [colorA, colorB] = color;
-//   node.style.background = `linear-gradient(to bottom, ${colorA},${colorB})`;
-// }
+const setClass = (removeNode, addNode, className) => {
+  setRemoveClass(removeNode, className);
+  addClass(addNode, className)
+}
 
-/*  getNode(
-  "body"
-).style.background = `linear-gradient(to bottom, ${colorA},${colorB})`; */
+// 2. nav 클릭시 배경 색상 변경 => setBgColor
+const setBgColor = (color) => {
+  const body = getNode("body");
+  const [colorA, colorB] = color;
+  body.style.background = `linear-gradient(to bottom, ${colorA},${colorB})`;
+};
+
+// 3. 이미지 변경 => setImage
+const setImage = (name) => {
+  const visualImage = getNode(".visual img");
+  visualImage.setAttribute("src", `./assets/${name.toLowerCase()}.jpeg`);
+};
+
+// 4. 텍스트 변경 => setNameText
+const setNameText = (name) => {
+  if (typeof node === "string") node = getNode(node);
+  const nickName = getNode(".nickName");
+  nickName.textContent = name;
+};
+
+// 대체첵스트 변경 -> setAlt
+const setAlt = (alt) => {
+  const visualImage = getNode(".visual img");
+  visualImage.setAttribute("alt", alt);
+};
+
+// ? 오디오 재생
+const setAudio = (name, volume) => {
+  // $ 이전에 재생 중이던 오디오가 있으면 정지
+  if (currentAudio) currentAudio.pause();
+
+  const audio = new Audio(
+    `/poster/client/assets/audio/${name.toLowerCase()}.m4a`
+  );
+  // 이전에 재생 중이던 오디오가 있을시 중지
+  audio.volume = volume; // 음량 설정
+  audio.play(); // 재생
+
+  // $ 현재 재생 중인 오디오 업데이트
+  currentAudio = audio;
+};
 
 // 변수 선언
 const container = getNode(".container");
 const list = [...getNode(".nav ul").children];
-const nickName = getNode(".nickName");
-const visualImage = getNode(".visual img");
 let currentAudio = null; // $ 이전에 재생 중이던 오디오를 추적하기 위한 변수
 
 // event
 function handleSlider(e) {
   e.preventDefault();
-  // li 요소 찾기
-  let target = e.target.closest("li");
 
+  let target = e.target.closest("li");
   if (!target) return;
 
-  // is-active 클래스 부여하기
-  list.forEach((li) => li.classList.remove("is-active"));
+  setClass(list, target, "is-active");
 
-  addClass(target, "is-active");
+  const index = target.dataset.index - 1;
+  const { color, name, alt } = data[index];
 
-  // 이미지
-  const index = target.dataset.index;
-  const data = data[index-1];
-  const {color} = data;
-  const [colorA, colorB] = color;
+  setBgColor(color);
 
-  // ^ 배경색 변경하기: 2. nav 클릭시 배경 색상 변경 => setBgColor
-  getNode(
-    "body"
-  ).style.background = `linear-gradient(to bottom, ${colorA},${colorB})`;
-  // setBgColor("body", index);
+  setNameText(name);
 
-  // 이름 변경
-  nickName.textContent = data[index - 1].name;
+  setImage(name);
 
-  // ^ 이미지 변경: 3. 이미지 변경 => setImage
-  visualImage.setAttribute("src", `./assets/${data[index - 1].name.toLowerCase()}.jpeg`);
-  // ^ 4. 텍스트 변경 => setNameText
-  visualImage.setAttribute("alt", data[index - 1].alt);
+  setAlt(alt);
 
-  // ^ +. 오디오 재생 => setAudio
-
-  // $ 이전에 재생 중이던 오디오가 있으면 정지
-  if (currentAudio) {
-    currentAudio.pause();
-  }
-
-  const audio = new Audio(`/poster/client/assets/audio/${data[index - 1].name.toLowerCase()}.m4a`);
-  // 이전에 재생 중이던 오디오가 있을시 중지
-  audio.volume = 0.5; // 음량 설정
-  audio.play();   // 재생
-
-  // $ 현재 재생 중인 오디오 업데이트
-  currentAudio = audio;
+  setAudio(name, 0.1);
 }
 
-// ^ 이벤트 위임: 1. 클릭 이벤트 활성화
+// 이벤트 위임: 1. 클릭 이벤트 활성화
 container.addEventListener("click", handleSlider);
