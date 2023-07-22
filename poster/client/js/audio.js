@@ -1,7 +1,7 @@
 
 
 
-class AudioPlayer {
+export class AudioPlayer {
   #audio = null;
 
   constructor(source) {

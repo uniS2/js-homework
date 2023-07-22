@@ -8,38 +8,19 @@
 
 */
 
-// 유틸 함수
-function getNode(node) {
-  if (typeof node !== "string") {
-    throw new Error("getNode 함수의 인수는 문자 타입 이어야 합니다.");
-  }
-
-  return document.querySelector(node);
-}
-
-function addClass(node, className) {
-  if (typeof node === "string") node = getNode(node);
-  node.classList.add(className);
-}
-
-function removeClass(node, className) {
-  if (typeof node === "string") node = getNode(node);
-  if (!className) {
-    node.className = "";
-    return;
-  }
-  node.classList.remove(className);
-}
+import { AudioPlayer } from "./audio.js";
+import { data } from "./data.js";
+import { addClass, getNode, isString, removeClass, setAttr } from "../lib/dom/index.js";
 
 // 사용자함수 생성
 // 1. 'is-active' 클래스 : 반복문
 const setRemoveAllClass = (node, className) => {
-  if (typeof node === "string") node = getNode(node);
+  if (isString(node)) node = getNode(node);
   if (!className) {
     node.className = "";
     return;
   }
-  node.forEach((node) => node.classList.remove(className));
+  node.forEach((node) => removeClass(node, className));
 };
 
 const setClass = (removeNode, addNode, className) => {
@@ -62,13 +43,13 @@ const setBgColor = (color) => {
 // 3. 이미지 및 대체텍스트 변경 => setImage
 const setImage = (srcName, alt) => {
   const visualImage = getNode(".visual img");
-  visualImage.setAttribute("src", `./assets/${srcName.toLowerCase()}.jpeg`);
-  visualImage.setAttribute("alt", alt);
+  setAttr(visualImage, "src", `./assets/${srcName.toLowerCase()}.jpeg`);
+  setAttr(visualImage, "alt", alt);
 };
 
 // 4. 텍스트 변경 => setNameText
 const setNameText = (title) => {
-  if (typeof node === "string") node = getNode(node);
+  if (isString(node)) node = getNode(node);
   const nickName = getNode(".nickName");
   nickName.textContent = title;
 };
