@@ -49,7 +49,6 @@ const setImage = (srcName, alt) => {
 
 // 4. 텍스트 변경 => setNameText
 const setNameText = (title) => {
-  if (isString(node)) node = getNode(node);
   const nickName = getNode(".nickName");
   nickName.textContent = title;
 };
