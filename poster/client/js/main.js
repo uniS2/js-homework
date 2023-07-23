@@ -94,9 +94,7 @@ function handleSlider(e) {
 
   setImage(name, alt);
 
-  setAudio(name, 1);
-
-  // * volume 조절할 수 있도록
+  setAudio(name, 0.5);
 }
 
 // 이벤트 위임: 1. 클릭 이벤트 활성화

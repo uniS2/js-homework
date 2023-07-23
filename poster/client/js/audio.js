@@ -1,3 +1,4 @@
+import { newError } from "../lib/error/index.js";
 
 
 
@@ -38,6 +39,16 @@ export class AudioPlayer {
 
   get time(){
     return this.#audio.currentTime;
+  }
+  
+  // volume 조절
+  set volume(volume) {
+    if (volume < 0 || volume > 1) newError('볼륨은 0과 1 사이의 숫자이어야 합니다.');
+    this.#audio.volume = volume;
+  }
+
+  get volume() {
+    return this.#audio.volume;
   }
 }
 
