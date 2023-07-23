@@ -62,7 +62,7 @@ const setAudio = (srcName, volume) => {
     }
   }
 
-  source = `/poster/client/assets/audio/${srcName.toLowerCase()}.m4a`;
+  let source = `/poster/client/assets/audio/${srcName.toLowerCase()}.m4a`;
   const playAudio = new AudioPlayer(source);
 
   playAudio.volume = volume;
