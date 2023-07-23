@@ -4,7 +4,7 @@
    
 ## 소개   
 <p align="center">
-  <img src="C:\Users\soixp\like-lion\js-homework\poster\client\assets\Elemental Movie Poster.mp4">
+  <img src="./client/assets/Elemental Movie GIF.gif">
 </p>
    
 메뉴의 엘리멘탈 포스터를 클릭했을 때 화면에 배경 색상, 메인 비주얼 및 비주얼 오디오 등 해당하는 포스터의 정보를 나타낼 수 있도록 코드 로직을 작성한다.   
